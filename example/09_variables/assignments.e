@@ -12,7 +12,7 @@ feature -- Path building
 		do
 			paris.display
 			console.show (total_time8)
-			--console.show (highest_name (Line8))
+			console.show (highest_name (Line8))
 		end
 
 
@@ -38,8 +38,28 @@ feature -- Path building
 
 	highest_name(line: TRAFFIC_LINE): STRING
 			-- Alphabetically last of names of stations on line
+		require
+			line_exists: line /= Void
+		local
+			i: INTEGER
+			new: STRING
 		do
-
+			from
+				Result := line.south_end.name
+				i := 1
+			invariant
+				-- "Значение Result - это 'максимальное'(в лексическом порядке)
+				-- название среди названий от первой до текущей станции,
+				-- заданной позицией курсора"
+			until
+				i = line.count
+			loop
+				new := line.i_th (1).name
+				if new > Result then
+					Result := new
+				end
+				i := i + 1
+			end
 		end
 
 end
